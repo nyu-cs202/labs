@@ -119,6 +119,14 @@ RUN apt-get -y install\
     libfuse-dev\
     fuse
 
+# install python2 for lab5
+RUN curl -o Python-2.7.18.tgz https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz &&\
+ tar -xvf Python-2.7.18.tgz &&\
+ cd Python-2.7.18 &&\
+ ./configure --enable-optimizations &&\
+ make &&\
+ sudo make install
+
 # link x86-64 versions of common tools into /usr/x86_64-linux-gnu/bin
 RUN for i in addr2line c++filt cpp-11 g++-11 gcc-11 gcov-11 gcov-dump-11 gcov-tool-11 size strings; do \
         ln -s /usr/bin/x86_64-linux-gnu-$i /usr/x86_64-linux-gnu/bin/$i; done && \

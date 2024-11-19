@@ -102,6 +102,14 @@ RUN apt-get -y install\
     libfuse-dev\
     fuse
 
+# install python2 for lab5
+RUN curl -o Python-2.7.18.tgz https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz &&\
+ tar -xvf Python-2.7.18.tgz &&\
+ cd Python-2.7.18 &&\
+ ./configure --enable-optimizations &&\
+ make &&\
+ sudo make install
+
 # set up default locale
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
