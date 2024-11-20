@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import sys, os, stat, optparse, re
 
@@ -7,10 +7,10 @@ def do_input(thisdir):
     homename = os.path.basename(os.path.abspath(os.path.expanduser("~")))
     thisdir = re.sub("(.*?)/%s" % homename, "~", thisdir)
     if always_yes:
-        print "chmod og+x %s" % thisdir
+        print("chmod og+x %s" % thisdir)
         return "y"
     else:
-        return raw_input("chmod og+x \"%s\"? [y/N] " % thisdir)
+        return input("chmod og+x \"%s\"? [y/N] " % thisdir)
 
 def setexec(head, tail):
     if head == "/" and tail == "":
@@ -30,14 +30,14 @@ def setexec(head, tail):
         if res in ("y", "Y"):
             os.chmod(thisdir, st.st_mode | stat.S_IXGRP | stat.S_IXOTH)
         else:
-            print """Warning!
+            print("""Warning!
 
 You may not be able to run the file systems lab without setting directory
 permissions correctly.  If you can't set permissions on some directory in
 the path, you should move the lab directory to somewhere else and run this
 script again.
 
-Aborting."""
+Aborting.""")
             sys.exit(1)
 
 def main(argv):
@@ -48,7 +48,7 @@ def main(argv):
     (options, args) = parser.parse_args(argv)
     always_yes = options.always_yes
     setexec(*os.path.split(os.getcwd()))
-    print "Directory permissions are set correctly."
+    print("Directory permissions are set correctly.")
     return 0
 
 if __name__ == "__main__":
