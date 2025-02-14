@@ -9,63 +9,62 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
+#include <string.h>
 
 
+void handle_pthread_error(const char* s, int rc)
+{
+    fprintf(stderr, "%s: %s\n", s, strerror(rc));
+    exit(-1);
+}
 
 void smutex_init(smutex_t *mutex)
 {
-    if (pthread_mutex_init(mutex, NULL))
-    {
-        perror("pthread_mutex_init failed");
-        exit(-1);
-    }
+    int rc;
+
+    if ((rc = pthread_mutex_init(mutex, NULL)))
+        handle_pthread_error("pthread_mutex_init failed", rc);
 }
 
 void smutex_destroy(smutex_t *mutex)
 {
-    if (pthread_mutex_destroy(mutex))
-    {
-        perror("pthread_mutex_destroy failed");
-        exit(-1);
-    }
+    int rc; 
+
+    if ((rc = pthread_mutex_destroy(mutex)))
+        handle_pthread_error("pthread_mutex_destroy failed", rc);
 }
 
 void smutex_lock(smutex_t *mutex)
 {
-    if (pthread_mutex_lock(mutex))
-    {
-        perror("pthread_mutex_lock failed");
-        exit(-1);
-    }
+    int rc;
+
+    if ((rc = pthread_mutex_lock(mutex)))
+        handle_pthread_error("pthread_mutex_lock failed", rc);
 }
 
 void smutex_unlock(smutex_t *mutex)
 {
-    if (pthread_mutex_unlock(mutex))
-    {
-        perror("pthread_mutex_unlock failed");
-        exit(-1);
-    }
-}
+    int rc;
 
+    if ((rc = pthread_mutex_unlock(mutex)))
+        handle_pthread_error("pthread_mutex_unlock failed", rc);
+}
 
 
 void scond_init(scond_t *cond)
 {
-    if (pthread_cond_init(cond, NULL))
-    {
-        perror("pthread_cond_init failed");
-        exit(-1);
-    }
+    int rc;
+
+    if ((rc = pthread_cond_init(cond, NULL)))
+        handle_pthread_error("pthread_cond_init failed", rc);
 }
 
 void scond_destroy(scond_t *cond)
 {
-    if (pthread_cond_destroy(cond))
-    {
-        perror("pthread_cond_destroy failed");
-        exit(-1);
-    }
+    int rc;
+
+    if ((rc = pthread_cond_destroy(cond)))
+        handle_pthread_error("pthread_cond_destroy failed", rc);
 }
 
 void scond_signal(scond_t *cond, smutex_t *mutex __attribute__((unused)))
@@ -74,11 +73,10 @@ void scond_signal(scond_t *cond, smutex_t *mutex __attribute__((unused)))
     // assert(mutex is held by this thread);
     //
 
-    if (pthread_cond_signal(cond))
-    {
-        perror("pthread_cond_signal failed");
-        exit(-1);
-    }
+    int rc;
+
+    if ((rc = pthread_cond_signal(cond)))
+        handle_pthread_error("pthread_cond_signal failed", rc);
 }
 
 void scond_broadcast(scond_t *cond, smutex_t *mutex __attribute__((unused)))
@@ -86,12 +84,10 @@ void scond_broadcast(scond_t *cond, smutex_t *mutex __attribute__((unused)))
     //
     // assert(mutex is held by this thread);
     //
+    int rc;
 
-    if (pthread_cond_broadcast(cond))
-    {
-        perror("pthread_cond_broadcast failed");
-        exit(-1);
-    }
+    if ((rc = pthread_cond_broadcast(cond)))
+        handle_pthread_error("pthread_cond_broadcast failed", rc);
 }
 
 void scond_wait(scond_t *cond, smutex_t *mutex)
@@ -99,12 +95,11 @@ void scond_wait(scond_t *cond, smutex_t *mutex)
     //
     // assert(mutex is held by this thread);
     //
+    
+    int rc;
 
-    if (pthread_cond_wait(cond, mutex))
-    {
-        perror("pthread_cond_wait failed");
-        exit(-1);
-    }
+    if ((rc = pthread_cond_wait(cond, mutex)))
+        handle_pthread_error("pthread_cond_wait failed", rc);
 }
 
 
@@ -124,12 +119,10 @@ void sthread_create(sthread_t *thread,
     pthread_attr_t attr;
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+    int rc;
 
-    if (pthread_create(thread, &attr, start_routine, argToStartRoutine))
-    {
-        perror("pthread_create failed");
-        exit(-1);
-    }
+    if ((rc = pthread_create(thread, &attr, start_routine, argToStartRoutine)))
+        handle_pthread_error("pthread_create failed", rc);
 }
 
 void sthread_exit(void)
@@ -141,7 +134,6 @@ void sthread_join(sthread_t thrd)
 {
     pthread_join(thrd, NULL);
 }
-
 
 
 /*
