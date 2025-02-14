@@ -110,7 +110,7 @@ void scond_wait(scond_t *cond, smutex_t *mutex)
 
 
 void sthread_create(sthread_t *thread,
-                    void (*start_routine(void*)), 
+                    void* (*start_routine)(void*), 
                     void *argToStartRoutine)
 {
     //
