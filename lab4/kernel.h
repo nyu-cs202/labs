@@ -178,7 +178,7 @@ void process_init(proc* p, int flags);
 
 // program_load(p, programnumber)
 //    Load the code corresponding to program `programnumber` into the process
-//    `p` and set `p->p_registers.reg_eip` to its entry point. Calls
+//    `p` and set `p->p_registers.reg_rip` to its entry point. Calls
 //    `assign_physical_page` as required. Returns 0 on success and
 //    -1 on failure (e.g. out-of-memory). `allocator` is passed to
 //    `virtual_memory_map`.
