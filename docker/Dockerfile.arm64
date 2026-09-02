@@ -142,14 +142,12 @@ ARG EMAIL=nobody@example.com
 
 # configure your environment
 USER cs202-user
+
 RUN git config --global user.name "${USER}" && \
  git config --global user.email "${EMAIL}" && \
  (echo "(custom-set-variables"; echo " '(c-basic-offset 4)"; echo " '(indent-tabs-mode nil))") > ~/.emacs && \
  (echo "set expandtab"; echo "set shiftwidth=4"; echo "set softtabstop=4") > ~/.vimrc && \
  cat /dev/null > ~/.bash_profile && \
- echo "# 2022: avoid a Docker bug with user mapping by listing working directory" >> ~/.bash_profile && \
- echo "ls -al > /dev/null" >> ~/.bash_profile && \
- echo "for i in \`mount | grep /home/cs202-user | sed 's/^.*\\(\\/home[^ ]*\\).*/\\\\1/'\`; do ls -al \$i > /dev/null; done" >> ~/.bash_profile && \
  echo "# make ssh-auth.sock user-readable" >> ~/.bash_profile && \
  (echo "if test -e /run/host-services/ssh-auth.sock; then"; echo "  sudo chown cs202-user:cs202-user /run/host-services/ssh-auth.sock"; echo "fi") >> ~/.bash_profile && \
  echo ". ~/.bashrc" >> ~/.bash_profile && \
