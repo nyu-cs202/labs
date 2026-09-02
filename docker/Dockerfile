@@ -102,8 +102,11 @@ ENV LANG=en_US.UTF-8
 RUN rm -r /var/lib/apt/lists/*
 
 # set up passwordless sudo for user cs202-user
-RUN useradd -m -s /bin/bash cs202-user && \
- echo "cs202-user ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/cs202-init
+# delete the ubuntu user first so the cs202-user gets the first uid and
+# matches the WSL user of 1000
+RUN userdel -r ubuntu && \
+    useradd -m -s /bin/bash cs202-user && \
+    echo "cs202-user ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/cs202-init
 
 # create binary reporting version of dockerfile
 RUN (echo '#\!/bin/sh'; echo 'echo 17') > /usr/bin/cs202-docker-version; chmod ugo+rx,u+w,go-w /usr/bin/cs202-docker-version
